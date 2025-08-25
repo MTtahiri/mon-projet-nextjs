@@ -1,6 +1,7 @@
 'use client';
+
 import { useState, useEffect } from 'react';
-import { Search, Briefcase, Star, Calendar } from 'lucide-react';
+import { Briefcase, Star, Calendar } from 'lucide-react';
 
 export default function ConsultantsPage() {
   const [candidates, setCandidates] = useState([]);
@@ -28,12 +29,15 @@ export default function ConsultantsPage() {
 
       const response = await fetch(`/api/consultants?${params}`);
       const result = await response.json();
-      
+
       if (result.success) {
         setCandidates(result.data);
+      } else {
+        setCandidates([]);
       }
     } catch (error) {
       console.error('Error fetching candidates:', error);
+      setCandidates([]);
     } finally {
       setLoading(false);
     }
@@ -60,15 +64,16 @@ export default function ConsultantsPage() {
                 type="text"
                 placeholder="React, Node.js, Python..."
                 value={filters.skills}
-                onChange={(e) => setFilters({...filters, skills: e.target.value})}
+                onChange={(e) => setFilters({ ...filters, skills: e.target.value })}
                 className="w-full border border-gray-300 rounded-md px-3 py-2"
               />
             </div>
+
             <div>
               <label className="block text-sm font-medium mb-2">Niveau</label>
               <select
                 value={filters.niveau}
-                onChange={(e) => setFilters({...filters, niveau: e.target.value})}
+                onChange={(e) => setFilters({ ...filters, niveau: e.target.value })}
                 className="w-full border border-gray-300 rounded-md px-3 py-2"
               >
                 <option value="">Tous</option>
@@ -78,11 +83,12 @@ export default function ConsultantsPage() {
                 <option value="expert">Expert</option>
               </select>
             </div>
+
             <div>
               <label className="block text-sm font-medium mb-2">Expérience min</label>
               <select
                 value={filters.minExp}
-                onChange={(e) => setFilters({...filters, minExp: parseInt(e.target.value)})}
+                onChange={(e) => setFilters({ ...filters, minExp: parseInt(e.target.value) })}
                 className="w-full border border-gray-300 rounded-md px-3 py-2"
               >
                 <option value="0">Tous</option>
@@ -91,12 +97,13 @@ export default function ConsultantsPage() {
                 <option value="10">10+ ans</option>
               </select>
             </div>
+
             <div className="flex items-end">
               <label className="flex items-center">
                 <input
                   type="checkbox"
                   checked={filters.enhanced}
-                  onChange={(e) => setFilters({...filters, enhanced: e.target.checked})}
+                  onChange={(e) => setFilters({ ...filters, enhanced: e.target.checked })}
                   className="mr-2"
                 />
                 <span className="text-sm">Analyse IA avancée</span>
@@ -122,11 +129,7 @@ export default function ConsultantsPage() {
             ))
           ) : (
             candidates.map((candidate) => (
-              <CandidateCard
-                key={candidate.id}
-                candidate={candidate}
-                enhanced={filters.enhanced}
-              />
+              <CandidateCard key={candidate.id} candidate={candidate} enhanced={filters.enhanced} />
             ))
           )}
         </div>
@@ -142,9 +145,7 @@ function CandidateCard({ candidate, enhanced }) {
     return 'text-red-600 bg-red-50';
   };
 
-  const displayScore = enhanced ? 
-    (candidate.scoring?.hybrid || candidate.scoreIA) : 
-    candidate.scoreIA;
+  const displayScore = enhanced ? (candidate.scoring?.hybrid || candidate.scoreIA) : candidate.scoreIA;
 
   return (
     <div className="bg-white p-6 rounded-lg shadow hover:shadow-md transition">
@@ -168,17 +169,12 @@ function CandidateCard({ candidate, enhanced }) {
         <h4 className="font-medium text-sm text-gray-700 mb-2">Compétences</h4>
         <div className="flex flex-wrap gap-2">
           {(candidate.competences || []).slice(0, 4).map((skill, idx) => (
-            <span 
-              key={idx}
-              className="bg-blue-100 text-blue-800 px-2 py-1 rounded text-xs"
-            >
+            <span key={idx} className="bg-blue-100 text-blue-800 px-2 py-1 rounded text-xs">
               {skill}
             </span>
           ))}
           {candidate.competences?.length > 4 && (
-            <span className="text-gray-500 text-xs">
-              +{candidate.competences.length - 4} autres
-            </span>
+            <span className="text-gray-500 text-xs">+{candidate.competences.length - 4} autres</span>
           )}
         </div>
       </div>
@@ -186,9 +182,7 @@ function CandidateCard({ candidate, enhanced }) {
       {enhanced && candidate.analysis && (
         <div className="mb-4 p-3 bg-purple-50 rounded">
           <h4 className="font-medium text-sm text-purple-800 mb-1">Analyse IA</h4>
-          <p className="text-xs text-purple-700">
-            {candidate.analysis.technical?.substring(0, 100)}...
-          </p>
+          <p className="text-xs text-purple-700">{candidate.analysis.technical?.substring(0, 100)}...</p>
         </div>
       )}
 
