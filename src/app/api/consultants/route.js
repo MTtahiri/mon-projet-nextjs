@@ -40,7 +40,7 @@ export async function GET(request) {
         ...candidate,
         nom: candidate.nom ? candidate.nom[0] + '***' : 'Anonyme',
         prenom: candidate.prenom ? candidate.prenom[0] + '***' : '',
-        posteAnonyme: `${candidate.niveau} ${candidate.poste}`.trim()
+posteAnonyme: `${candidate.niveau ?? ''} ${candidate.poste ?? ''}`.trim()
       })),
       enhanced: false
     });
@@ -54,3 +54,13 @@ export async function GET(request) {
     }, { status: 500 });
   }
 }
+data: candidates.map(candidate => {
+  console.log('Candidate niveau:', candidate.niveau, 'poste:', candidate.poste);
+  return {
+    ...candidate,
+    nom: candidate.nom ? candidate.nom[0] + '***' : 'Anonyme',
+    prenom: candidate.prenom ? candidate.prenom[0] + '***' : '',
+    posteAnonyme: `${candidate.niveau ?? ''} ${candidate.poste ?? ''}`.trim()
+  };
+}),
+[candidate.niveau, candidate.poste].filter(Boolean).join(' ') || 'Niveau/Poste non défini'

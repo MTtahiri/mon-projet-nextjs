@@ -1,3 +1,35 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  
+  body {
+    @apply text-neutral-900 bg-neutral-50;
+    font-feature-settings: 'rlig' 1, 'calt' 1;
+  }
+  
+  * {
+    @apply border-neutral-200;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    @apply text-neutral-900;
+    font-weight: 600;
+    line-height: 1.25;
+  }
+  
+  p {
+    @apply text-neutral-700;
+    line-height: 1.6;
+  }
+  
+  *:focus-visible {
+    @apply outline-2 outline-offset-2 outline-primary-500;
+  }
+}
