@@ -1,327 +1,355 @@
-// FICHIER 1: src/app/page.js - Page d'accueil
+'use client';
+
+import { useState } from 'react';
 import Link from 'next/link';
 
-const Button = ({ children, href, variant = 'primary', size = 'md', className = '' }) => {
-  const baseClasses = 'inline-flex items-center justify-center font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2';
-  const variants = {
-    primary: 'bg-blue-600 text-white hover:bg-blue-700 focus:ring-blue-500',
-    secondary: 'bg-white text-gray-900 border border-gray-300 hover:bg-gray-50 focus:ring-blue-500',
-    ghost: 'text-gray-700 hover:bg-gray-100 focus:ring-blue-500'
-  };
-  const sizes = {
-    sm: 'h-8 px-3 text-sm rounded-md',
-    md: 'h-10 px-4 py-2 rounded-md',
-    lg: 'h-12 px-6 py-3 text-lg rounded-lg'
-  };
-
-  const Component = href ? Link : 'button';
-  const props = href ? { href } : {};
-  
-  return (
-    <Component className={`${baseClasses} ${variants[variant]} ${sizes[size]} ${className}`} {...props}>
-      {children}
-    </Component>
-  );
-};
-
 export default function HomePage() {
-  return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-white">
-      <header className="bg-white shadow-sm">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center py-4">
-            <div className="text-2xl font-bold text-blue-600">🔒 RecrutAnonymE</div>
-            <nav className="hidden md:flex space-x-8">
-              <Link href="/consultants" className="text-gray-700 hover:text-blue-600 transition-colors">Consultants</Link>
-              <Link href="#features" className="text-gray-700 hover:text-blue-600 transition-colors">À propos</Link>
-              <Link href="#contact" className="text-gray-700 hover:text-blue-600 transition-colors">Contact</Link>
-            </nav>
-          </div>
-        </div>
-      </header>
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [showContactModal, setShowContactModal] = useState(false);
 
-      <section className="relative px-6 lg:px-8">
-        <div className="mx-auto max-w-3xl pt-20 pb-32 sm:pt-48 sm:pb-40">
-          <div className="text-center">
-            <h1 className="text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl">
-              Recrutement <span className="text-blue-600">anonyme</span>
-            </h1>
-            <p className="mt-6 text-lg leading-8 text-gray-600">
-              Découvrez des talents exceptionnels dans le respect total du RGPD. 
-              Nos profils anonymisés vous permettent de recruter sur la compétence, pas sur les préjugés.
-            </p>
-            <div className="mt-10 flex items-center justify-center gap-x-6">
-              <Button size="lg" href="/consultants">Explorer les profils</Button>
-              <Button variant="ghost" size="lg">En savoir plus</Button>
+  // Modal Devenir Consultant
+  function DevenirConsultantModal({ onClose }) {
+    const [formData, setFormData] = useState({
+      name: '', email: '', expertise: '', experience: '', message: ''
+    });
+
+    const handleSubmit = (e) => {
+      e.preventDefault();
+      console.log('Inscription consultant:', formData);
+      alert('Merci pour votre intérêt ! Nous vous contacterons bientôt.');
+      onClose();
+    };
+
+    return (
+      <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+        <div className="bg-white rounded-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+          <div className="p-6 border-b">
+            <div className="flex justify-between items-center">
+              <h2 className="text-2xl font-bold text-gray-900">Rejoindre S.M.Consulting</h2>
+              <button onClick={onClose} className="text-gray-400 hover:text-gray-600 text-2xl">×</button>
             </div>
-          </div>
-        </div>
-      </section>
-
-      <section id="features" className="py-24 sm:py-32 bg-white">
-        <div className="mx-auto max-w-7xl px-6 lg:px-8">
-          <div className="mx-auto max-w-2xl lg:text-center">
-            <h2 className="text-base font-semibold leading-7 text-blue-600">Recrutement moderne</h2>
-            <p className="mt-2 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
-              Pourquoi choisir notre plateforme ?
-            </p>
           </div>
           
-          <div className="mx-auto mt-16 max-w-2xl sm:mt-20 lg:mt-24 lg:max-w-none">
-            <div className="grid max-w-xl grid-cols-1 gap-x-8 gap-y-16 lg:max-w-none lg:grid-cols-3">
-              
-              <div className="bg-white border border-gray-200 rounded-lg shadow-sm p-6">
-                <div className="flex items-center gap-x-3 mb-4">
-                  <div className="h-10 w-10 flex items-center justify-center rounded-lg bg-blue-600">
-                    <span className="text-white text-xl">🔒</span>
-                  </div>
-                  <h3 className="text-base font-semibold leading-7 text-gray-900">RGPD Compliant</h3>
-                </div>
-                <p className="text-base leading-7 text-gray-600">
-                  Respect total de la confidentialité. Aucune donnée personnelle n'est exposée sans consentement explicite.
-                </p>
-              </div>
+          <form onSubmit={handleSubmit} className="p-6 space-y-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Nom complet *</label>
+              <input
+                type="text" required
+                value={formData.name}
+                onChange={(e) => setFormData({...formData, name: e.target.value})}
+                className="w-full border border-gray-300 rounded px-3 py-2 focus:border-indigo-500 focus:ring-indigo-500"
+              />
+            </div>
+            
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Email *</label>
+              <input
+                type="email" required
+                value={formData.email}
+                onChange={(e) => setFormData({...formData, email: e.target.value})}
+                className="w-full border border-gray-300 rounded px-3 py-2 focus:border-indigo-500 focus:ring-indigo-500"
+              />
+            </div>
+            
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Domaine d'expertise *</label>
+              <select
+                required
+                value={formData.expertise}
+                onChange={(e) => setFormData({...formData, expertise: e.target.value})}
+                className="w-full border border-gray-300 rounded px-3 py-2 focus:border-indigo-500 focus:ring-indigo-500"
+              >
+                <option value="">Sélectionnez votre domaine</option>
+                <option value="dev">Développement Web</option>
+                <option value="marketing">Marketing Digital</option>
+                <option value="design">Design & UX/UI</option>
+                <option value="strategie">Stratégie d'Entreprise</option>
+                <option value="data">Data Science</option>
+                <option value="autre">Autre</option>
+              </select>
+            </div>
+            
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Années d'expérience *</label>
+              <select
+                required
+                value={formData.experience}
+                onChange={(e) => setFormData({...formData, experience: e.target.value})}
+                className="w-full border border-gray-300 rounded px-3 py-2 focus:border-indigo-500 focus:ring-indigo-500"
+              >
+                <option value="">Sélectionnez</option>
+                <option value="1-3">1-3 ans</option>
+                <option value="3-5">3-5 ans</option>
+                <option value="5-10">5-10 ans</option>
+                <option value="10+">Plus de 10 ans</option>
+              </select>
+            </div>
+            
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Message de présentation</label>
+              <textarea
+                rows={4}
+                value={formData.message}
+                onChange={(e) => setFormData({...formData, message: e.target.value})}
+                className="w-full border border-gray-300 rounded px-3 py-2 focus:border-indigo-500 focus:ring-indigo-500"
+                placeholder="Présentez-vous et décrivez votre expertise..."
+              />
+            </div>
+            
+            <div className="flex justify-end space-x-3 pt-4">
+              <button type="button" onClick={onClose} className="px-4 py-2 border border-gray-300 rounded text-gray-700 hover:bg-gray-50">
+                Annuler
+              </button>
+              <button type="submit" className="px-6 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700">
+                Envoyer ma candidature
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    );
+  }
 
-              <div className="bg-white border border-gray-200 rounded-lg shadow-sm p-6">
-                <div className="flex items-center gap-x-3 mb-4">
-                  <div className="h-10 w-10 flex items-center justify-center rounded-lg bg-blue-600">
-                    <span className="text-white text-xl">⚡</span>
-                  </div>
-                  <h3 className="text-base font-semibold leading-7 text-gray-900">Process Optimisé</h3>
-                </div>
-                <p className="text-base leading-7 text-gray-600">
-                  Interface intuitive pour une sélection rapide et efficace basée sur les compétences.
-                </p>
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
+      {/* Navigation */}
+      <nav className="bg-white shadow-lg">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex justify-between h-16">
+            <div className="flex items-center">
+              <div className="flex-shrink-0">
+                <h1 className="text-2xl font-bold text-indigo-600">S.M.Consulting</h1>
               </div>
+            </div>
+            
+            {/* Desktop Navigation */}
+            <div className="hidden md:flex items-center space-x-8">
+              <Link href="/" className="text-gray-700 hover:text-indigo-600 px-3 py-2 rounded-md text-sm font-medium">
+                Accueil
+              </Link>
+              <Link href="/consultants" className="text-gray-700 hover:text-indigo-600 px-3 py-2 rounded-md text-sm font-medium">
+                Consultants
+              </Link>
+              <Link href="/services" className="text-gray-700 hover:text-indigo-600 px-3 py-2 rounded-md text-sm font-medium">
+                Services
+              </Link>
+              <Link href="/contact" className="text-gray-700 hover:text-indigo-600 px-3 py-2 rounded-md text-sm font-medium">
+                Contact
+              </Link>
+              <button 
+                onClick={() => setShowContactModal(true)}
+                className="bg-indigo-600 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-indigo-700"
+              >
+                Connexion
+              </button>
+            </div>
 
-              <div className="bg-white border border-gray-200 rounded-lg shadow-sm p-6">
-                <div className="flex items-center gap-x-3 mb-4">
-                  <div className="h-10 w-10 flex items-center justify-center rounded-lg bg-blue-600">
-                    <span className="text-white text-xl">🎯</span>
-                  </div>
-                  <h3 className="text-base font-semibold leading-7 text-gray-900">Matching Précis</h3>
-                </div>
-                <p className="text-base leading-7 text-gray-600">
-                  Algorithmes avancés pour matcher les compétences exactes avec vos besoins métier.
-                </p>
-              </div>
-
+            {/* Mobile menu button */}
+            <div className="md:hidden flex items-center">
+              <button
+                onClick={() => setIsMenuOpen(!isMenuOpen)}
+                className="text-gray-700 hover:text-indigo-600 focus:outline-none focus:text-indigo-600"
+              >
+                <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                </svg>
+              </button>
             </div>
           </div>
         </div>
-      </section>
 
-      <section className="bg-blue-600 py-24 sm:py-32">
-        <div className="mx-auto max-w-7xl px-6 lg:px-8">
+        {/* Mobile Navigation */}
+        {isMenuOpen && (
+          <div className="md:hidden">
+            <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3 bg-white border-t">
+              <Link href="/" className="block text-gray-700 hover:text-indigo-600 px-3 py-2 rounded-md text-base font-medium">
+                Accueil
+              </Link>
+              <Link href="/consultants" className="block text-gray-700 hover:text-indigo-600 px-3 py-2 rounded-md text-base font-medium">
+                Consultants
+              </Link>
+              <Link href="/services" className="block text-gray-700 hover:text-indigo-600 px-3 py-2 rounded-md text-base font-medium">
+                Services
+              </Link>
+              <Link href="/contact" className="block text-gray-700 hover:text-indigo-600 px-3 py-2 rounded-md text-base font-medium">
+                Contact
+              </Link>
+              <button 
+                onClick={() => setShowContactModal(true)}
+                className="w-full text-left bg-indigo-600 text-white px-3 py-2 rounded-md text-base font-medium hover:bg-indigo-700"
+              >
+                Connexion
+              </button>
+            </div>
+          </div>
+        )}
+      </nav>
+
+      {/* Hero Section */}
+      <section className="relative py-20 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto">
           <div className="text-center">
-            <h2 className="text-3xl font-bold tracking-tight text-white sm:text-4xl">
-              Nos résultats parlent d'eux-mêmes
-            </h2>
-            <p className="mt-4 text-lg leading-8 text-blue-200">Plus de 500 entreprises nous font confiance</p>
-          </div>
-          <div className="mt-16 grid grid-cols-1 gap-0.5 overflow-hidden rounded-2xl text-center sm:grid-cols-2 lg:grid-cols-4">
-            <div className="flex flex-col bg-blue-700/10 p-8">
-              <dt className="text-sm font-semibold leading-6 text-blue-200">Consultants</dt>
-              <dd className="order-first text-3xl font-bold tracking-tight text-white">2,500+</dd>
-            </div>
-            <div className="flex flex-col bg-blue-700/10 p-8">
-              <dt className="text-sm font-semibold leading-6 text-blue-200">Entreprises</dt>
-              <dd className="order-first text-3xl font-bold tracking-tight text-white">500+</dd>
-            </div>
-            <div className="flex flex-col bg-blue-700/10 p-8">
-              <dt className="text-sm font-semibold leading-6 text-blue-200">Taux de succès</dt>
-              <dd className="order-first text-3xl font-bold tracking-tight text-white">94%</dd>
-            </div>
-            <div className="flex flex-col bg-blue-700/10 p-8">
-              <dt className="text-sm font-semibold leading-6 text-blue-200">Conformité RGPD</dt>
-              <dd className="order-first text-3xl font-bold tracking-tight text-white">100%</dd>
+            <h1 className="text-4xl md:text-6xl font-bold text-gray-900 mb-6">
+              Trouvez le <span className="text-indigo-600">consultant parfait</span> pour votre projet
+            </h1>
+            <p className="text-xl text-gray-600 mb-8 max-w-3xl mx-auto">
+              Connectez-vous avec des experts qualifiés dans tous les domaines. 
+              Notre plateforme vous aide à trouver le bon consultant pour faire avancer votre entreprise.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Link href="/consultants" className="bg-indigo-600 text-white px-8 py-3 rounded-lg text-lg font-semibold hover:bg-indigo-700 transition duration-300">
+                Parcourir les consultants
+              </Link>
+              <button 
+                onClick={() => setShowContactModal(true)}
+                className="border-2 border-indigo-600 text-indigo-600 px-8 py-3 rounded-lg text-lg font-semibold hover:bg-indigo-50 transition duration-300"
+              >
+                Devenir consultant
+              </button>
             </div>
           </div>
         </div>
       </section>
 
-      <section className="bg-gray-50">
-        <div className="px-6 py-24 sm:px-6 sm:py-32 lg:px-8">
-          <div className="mx-auto max-w-2xl text-center">
-            <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
-              Prêt à découvrir votre prochain talent ?
+      {/* Features Section */}
+      <section className="py-20 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+              Pourquoi choisir S.M.Consulting ?
             </h2>
-            <p className="mx-auto mt-6 max-w-xl text-lg leading-8 text-gray-600">
-              Explorez nos profils anonymisés et trouvez le consultant parfait pour votre projet.
+            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+              Notre plateforme offre une expérience unique pour connecter les entreprises avec les meilleurs consultants.
             </p>
-            <div className="mt-10 flex items-center justify-center gap-x-6">
-              <Button size="lg" href="/consultants">Commencer maintenant</Button>
-              <Button variant="ghost" size="lg">Planifier une démo</Button>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div className="text-center p-6">
+              <div className="w-16 h-16 bg-indigo-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <svg className="w-8 h-8 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+              </div>
+              <h3 className="text-xl font-semibold text-gray-900 mb-2">Consultants vérifiés</h3>
+              <p className="text-gray-600">
+                Tous nos consultants sont soigneusement sélectionnés et leurs compétences sont vérifiées.
+              </p>
+            </div>
+
+            <div className="text-center p-6">
+              <div className="w-16 h-16 bg-indigo-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <svg className="w-8 h-8 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                </svg>
+              </div>
+              <h3 className="text-xl font-semibold text-gray-900 mb-2">Matching intelligent</h3>
+              <p className="text-gray-600">
+                Notre algorithme trouve le consultant idéal selon vos besoins spécifiques.
+              </p>
+            </div>
+
+            <div className="text-center p-6">
+              <div className="w-16 h-16 bg-indigo-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <svg className="w-8 h-8 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1" />
+                </svg>
+              </div>
+              <h3 className="text-xl font-semibold text-gray-900 mb-2">Tarifs transparents</h3>
+              <p className="text-gray-600">
+                Pas de frais cachés. Vous savez exactement ce que vous payez avant de commencer.
+              </p>
             </div>
           </div>
         </div>
       </section>
 
-      <footer className="bg-white">
-        <div className="mx-auto max-w-7xl px-6 py-12 md:flex md:items-center md:justify-between lg:px-8">
-          <div className="flex justify-center space-x-6 md:order-2">
-            <Link href="#privacy" className="text-gray-400 hover:text-gray-500">Confidentialité</Link>
-            <Link href="#terms" className="text-gray-400 hover:text-gray-500">CGU</Link>
-            <Link href="#contact" className="text-gray-400 hover:text-gray-500">Contact</Link>
+      {/* Stats Section */}
+      <section className="py-20 bg-indigo-600">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-8 text-center">
+            <div>
+              <div className="text-4xl font-bold text-white mb-2">500+</div>
+              <div className="text-indigo-200">Consultants experts</div>
+            </div>
+            <div>
+              <div className="text-4xl font-bold text-white mb-2">1000+</div>
+              <div className="text-indigo-200">Projets réalisés</div>
+            </div>
+            <div>
+              <div className="text-4xl font-bold text-white mb-2">98%</div>
+              <div className="text-indigo-200">Satisfaction client</div>
+            </div>
+            <div>
+              <div className="text-4xl font-bold text-white mb-2">24h</div>
+              <div className="text-indigo-200">Temps de réponse moyen</div>
+            </div>
           </div>
-          <div className="mt-8 md:order-1 md:mt-0">
-            <p className="text-center text-xs leading-5 text-gray-500">
-              &copy; 2025 RecrutAnonymE. Tous droits réservés. Conforme RGPD.
-            </p>
+        </div>
+      </section>
+
+      {/* CTA Section */}
+      <section className="py-20 bg-gray-50">
+        <div className="max-w-4xl mx-auto text-center px-4 sm:px-6 lg:px-8">
+          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+            Prêt à démarrer votre projet ?
+          </h2>
+          <p className="text-xl text-gray-600 mb-8">
+            Rejoignez des milliers d'entreprises qui font confiance à S.M.Consulting pour leurs besoins en consulting.
+          </p>
+          <Link href="/consultants" className="bg-indigo-600 text-white px-8 py-3 rounded-lg text-lg font-semibold hover:bg-indigo-700 transition duration-300 inline-block">
+            Commencer maintenant
+          </Link>
+        </div>
+      </section>
+
+      {/* Footer */}
+      <footer className="bg-gray-900 text-white py-12">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+            <div>
+              <h3 className="text-xl font-bold mb-4">S.M.Consulting</h3>
+              <p className="text-gray-400">
+                La plateforme de référence pour connecter entreprises et consultants experts.
+              </p>
+            </div>
+            <div>
+              <h4 className="text-lg font-semibold mb-4">Services</h4>
+              <ul className="space-y-2 text-gray-400">
+                <li><Link href="/services" className="hover:text-white">Développement</Link></li>
+                <li><Link href="/services" className="hover:text-white">Marketing</Link></li>
+                <li><Link href="/services" className="hover:text-white">Design</Link></li>
+                <li><Link href="/services" className="hover:text-white">Stratégie</Link></li>
+              </ul>
+            </div>
+            <div>
+              <h4 className="text-lg font-semibold mb-4">Entreprise</h4>
+              <ul className="space-y-2 text-gray-400">
+                <li><Link href="/contact" className="hover:text-white">À propos</Link></li>
+                <li><Link href="/contact" className="hover:text-white">Carrières</Link></li>
+                <li><Link href="/contact" className="hover:text-white">Presse</Link></li>
+                <li><Link href="/contact" className="hover:text-white">Partenaires</Link></li>
+              </ul>
+            </div>
+            <div>
+              <h4 className="text-lg font-semibold mb-4">Support</h4>
+              <ul className="space-y-2 text-gray-400">
+                <li><Link href="/contact" className="hover:text-white">Centre d'aide</Link></li>
+                <li><Link href="/contact" className="hover:text-white">Contact</Link></li>
+                <li><Link href="/contact" className="hover:text-white">Conditions</Link></li>
+                <li><Link href="/contact" className="hover:text-white">Confidentialité</Link></li>
+              </ul>
+            </div>
+          </div>
+          <div className="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
+            <p>&copy; 2025 S.M.Consulting. Tous droits réservés.</p>
           </div>
         </div>
       </footer>
+
+      {/* Modal Devenir Consultant */}
+      {showContactModal && (
+        <DevenirConsultantModal onClose={() => setShowContactModal(false)} />
+      )}
     </div>
   );
 }
-
-// ============================================================================
-// FICHIER 2: src/app/layout.js - Layout principal
-import './globals.css';
-
-export const metadata = {
-  title: 'RecrutAnonymE - Plateforme RGPD Compliant',
-  description: 'Plateforme de recrutement respectueuse du RGPD. Découvrez des talents exceptionnels grâce à nos profils anonymisés.',
-  keywords: ['recrutement', 'talents', 'RGPD', 'anonyme', 'consultants', 'tech'],
-};
-
-export default function RootLayout({ children }) {
-  return (
-    <html lang="fr" className="scroll-smooth">
-      <body className="font-sans antialiased">
-        {children}
-      </body>
-    </html>
-  );
-}
-
-// ============================================================================  
-// FICHIER 3: src/app/globals.css - Styles globaux
-@import 'tailwindcss/base';
-@import 'tailwindcss/components';
-@import 'tailwindcss/utilities';
-
-/* Styles personnalisés */
-.font-sans {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
-}
-
-/* Animations personnalisées */
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-
-@keyframes slideUp {
-  from { transform: translateY(20px); opacity: 0; }
-  to { transform: translateY(0); opacity: 1; }
-}
-
-.animate-fade-in { animation: fadeIn 0.5s ease-in-out; }
-.animate-slide-up { animation: slideUp 0.3s ease-out; }
-
-/* Responsive amélioré */
-@media (max-width: 640px) {
-  .text-responsive { font-size: 1.5rem !important; }
-  .px-responsive { padding-left: 1rem !important; padding-right: 1rem !important; }
-}
-
-// ============================================================================
-// FICHIER 4: package.json - Dependencies corrigées
-{
-  "name": "recrutement-anonyme",
-  "version": "1.0.0",
-  "description": "Plateforme de recrutement RGPD compliant avec profils anonymisés",
-  "private": true,
-  "type": "module",
-  "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
-    "lint": "next lint"
-  },
-  "dependencies": {
-    "next": "^15.5.0",
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0"
-  },
-  "devDependencies": {
-    "@types/node": "^22.0.0",
-    "@types/react": "^19.0.0",
-    "@types/react-dom": "^19.0.0",
-    "autoprefixer": "^10.4.20",
-    "eslint": "^9.0.0",
-    "eslint-config-next": "^15.5.0",
-    "postcss": "^8.4.49",
-    "tailwindcss": "^3.4.17",
-    "typescript": "^5.6.3"
-  },
-  "keywords": [
-    "recrutement", "RGPD", "anonyme", "nextjs", "react", "tailwindcss"
-  ],
-  "author": "Votre Nom",
-  "license": "MIT"
-}
-
-// ============================================================================
-// FICHIER 5: next.config.js - Configuration Next.js
-const nextConfig = {
-  experimental: {
-    appDir: true,
-  },
-  images: {
-    domains: ['your-domain.com'],
-  },
-  async headers() {
-    return [
-      {
-        source: '/:path*',
-        headers: [
-          { key: 'X-Frame-Options', value: 'DENY' },
-          { key: 'X-Content-Type-Options', value: 'nosniff' },
-          { key: 'Referrer-Policy', value: 'origin-when-cross-origin' },
-        ],
-      },
-    ];
-  },
-};
-
-export default nextConfig;
-
-// ============================================================================
-// FICHIER 6: tailwind.config.js - Configuration Tailwind
-/** @type {import('tailwindcss').Config} */
-export default {
-  content: [
-    './src/pages/**/*.{js,ts,jsx,tsx,mdx}',
-    './src/components/**/*.{js,ts,jsx,tsx,mdx}',
-    './src/app/**/*.{js,ts,jsx,tsx,mdx}',
-  ],
-  theme: {
-    extend: {
-      colors: {
-        primary: {
-          50: '#eff6ff',
-          100: '#dbeafe',
-          500: '#3b82f6',
-          600: '#2563eb',
-          700: '#1d4ed8',
-        },
-      },
-      animation: {
-        'fade-in': 'fadeIn 0.5s ease-in-out',
-        'slide-up': 'slideUp 0.3s ease-out',
-      },
-    },
-  },
-  plugins: [],
-};
-
-// ============================================================================
-// FICHIER 7: postcss.config.js - Configuration PostCSS
-export default {
-  plugins: {
-    tailwindcss: {},
-    autoprefixer: {},
-  },
-};

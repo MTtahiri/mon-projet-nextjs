@@ -1,22 +1,12 @@
-import NextAuth from "next-auth";
-import GoogleProvider from "next-auth/providers/google";
+import NextAuth from '@auth/core';
+import Google from '@auth/core/providers/google';
 
-const handler = NextAuth({
-  providers: [
-    GoogleProvider({
-      clientId: process.env.GOOGLE_CLIENT_ID!,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
-      authorization: {
-        params: {
-          prompt: "consent",
-          access_type: "offline",
-          response_type: "code",
-        },
-      },
-    }),
-  ],
-  secret: process.env.AUTH_SECRET,
-  debug: true, // active le mode debug pour voir les erreurs
+export const handlers = NextAuth({
+    providers: [
+        Google({
+            clientId: process.env.GOOGLE_CLIENT_ID!,
+            clientSecret: process.env.GOOGLE_CLIENT_SECRET!
+        })
+    ],
+    secret: process.env.AUTH_SECRET
 });
-
-export { handler as GET, handler as POST };

@@ -1,32 +1,28 @@
 {
-  "name": "plateforme-recrutement-anonyme",
+  "name": "sm-consulting",
   "version": "1.0.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "next build", 
     "start": "next start",
-    "lint": "next lint",
-    "type-check": "tsc --noEmit"
+    "lint": "next lint"
   },
   "dependencies": {
-    "next": "^15.0.3",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "clsx": "^2.0.0",
-    "zod": "^3.22.4"
+    "next": "15.5.2",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "next-auth": "^4.24.8"
   },
   "devDependencies": {
-    "@types/node": "^20.10.0",
-    "@types/react": "^18.2.45",
-    "@types/react-dom": "^18.2.18",
-    "typescript": "^5.3.3",
-    "eslint": "^8.56.0",
-    "eslint-config-next": "^15.0.3",
-    "tailwindcss": "^3.4.0",
-    "autoprefixer": "^10.4.16",
-    "postcss": "^8.4.32",
-    "@tailwindcss/forms": "^0.5.7",
-    "@tailwindcss/typography": "^0.5.10"
+    "@types/node": "^20",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "autoprefixer": "^10.4.21",
+    "eslint": "^8",
+    "eslint-config-next": "15.5.2", 
+    "postcss": "^8.5.6",
+    "tailwindcss": "^3.4.17",
+    "typescript": "^5"
   }
 }
